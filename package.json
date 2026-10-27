@@ -46,5 +46,12 @@
     "@types/node": "26.6.5",
     "tsx": "4.23.15",
     "typescript": "7.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kryptoscan/email-deliverability-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kryptoscan/email-deliverability-mcp/issues"
   }
 }
