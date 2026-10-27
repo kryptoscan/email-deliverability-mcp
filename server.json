@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.kryptoscan/email-deliverability-mcp",
+  "title": "Email Deliverability Checker",
+  "description": "Check SPF, DKIM, DMARC and MX, sending IP blocklists and reverse DNS, and email headers against Gmail/Yahoo rules.",
+  "version": "0.1.0",
+  "repository": {
+    "url": "https://github.com/kryptoscan/email-deliverability-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://ownmailserver.com/claude-email-connector",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://api.ownmailserver.com/tools/mcp"
+    }
+  ]
+}
