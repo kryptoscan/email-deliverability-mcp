@@ -1,0 +1,22 @@
+# Smithery: https://smithery.ai/docs/build/project-config
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      blocklistDns:
+        type: string
+        description: "Optional. Comma-separated IPs of a recursive DNS resolver you run, used for blocklist lookups. Spamhaus refuses public resolvers, so without one its result is reported as unknown."
+      dnsServers:
+        type: string
+        description: "Optional. Comma-separated resolver IPs for normal lookups (default: the system resolver)."
+  commandFunction: |-
+    (config) => ({
+      command: "node",
+      args: ["dist/index.js"],
+      env: {
+        ...(config.blocklistDns ? { BLOCKLIST_DNS: config.blocklistDns } : {}),
+        ...(config.dnsServers ? { DNS_SERVERS: config.dnsServers } : {}),
+      },
+    })
+  exampleConfig: {}
