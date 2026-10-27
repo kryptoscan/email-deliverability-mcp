@@ -4,7 +4,8 @@
   "description": "MCP server that checks email deliverability: SPF, DKIM, DMARC and MX records, sending IP blocklists and reverse DNS, and email headers against Gmail and Yahoo sender requirements.",
   "type": "module",
   "bin": {
-    "email-deliverability-mcp": "dist/index.js"
+    "email-deliverability-mcp": "dist/index.js",
+    "email-deliverability-mcp-http": "dist/http.js"
   },
   "main": "dist/index.js",
   "files": [
@@ -18,7 +19,8 @@
     "typecheck": "tsc --noEmit",
     "start": "node dist/index.js",
     "prepublishOnly": "npm run build && npm test",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "start:http": "node dist/http.js"
   },
   "keywords": [
     "mcp",

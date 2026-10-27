@@ -8,6 +8,22 @@ An MCP server that lets Claude (or any MCP client) diagnose email deliverability
 
 Every tool is read-only: it reads public DNS or the text you give it. Nothing is sent anywhere else, and no account or API key is needed.
 
+## Use it without installing
+
+A hosted copy runs at:
+
+```
+https://api.ownmailserver.com/tools/mcp
+```
+
+Add it to Claude as a custom connector (Settings → Connectors → Add custom connector), or in Claude Code:
+
+```sh
+claude mcp add --transport http email-deliverability https://api.ownmailserver.com/tools/mcp
+```
+
+It's free and needs no account. It's rate-limited per IP, uses public DNS resolvers (so Spamhaus results show as "refused"; see below), and stores nothing. For heavy use or a real Spamhaus answer, run your own copy.
+
 ## Install
 
 Requires Node.js 20 or later.
@@ -70,6 +86,7 @@ Spamhaus refuses queries that arrive through big public resolvers (8.8.8.8, 1.1.
 npm install
 npm test          # unit tests with a fake DNS resolver
 npm run build     # compiles to dist/
+npm run start:http  # the HTTP version (PORT, MCP_PATH, TRUST_PROXY, RATE_LIMIT, GLOBAL_LIMIT)
 ```
 
 ## About
