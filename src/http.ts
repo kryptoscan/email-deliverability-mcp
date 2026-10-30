@@ -72,6 +72,20 @@ async function readJson(req: IncomingMessage): Promise<unknown> {
   catch { throw Object.assign(new Error("Invalid JSON"), { status: 400 }); }
 }
 
+// One line per tools/call, so real usage can be told apart from bots that only list tools.
+// Logs the domain or IP checked, never the headers text.
+export function toolCallLines(body: unknown, ip: string, ua = "-"): string[] {
+  const calls = (Array.isArray(body) ? body : [body]) as { method?: unknown; params?: { name?: unknown; arguments?: Record<string, unknown> } }[];
+  return calls.filter((m) => m?.method === "tools/call").map(({ params }) => {
+    const args = params?.arguments ?? {};
+    const target = typeof args.domain === "string" ? args.domain
+      : typeof args.ip === "string" ? args.ip
+      : typeof args.headers === "string" ? `${args.headers.length} chars` : "-";
+    return `tool_call ${String(params?.name ?? "?")} target=${JSON.stringify(target.slice(0, 253))} ip=${ip} ua=${JSON.stringify(ua.slice(0, 200))}`;
+  });
+}
+const logToolCalls = (body: unknown, ip: string, ua?: string) => toolCallLines(body, ip, ua).forEach((l) => console.log(l));
+
 const http = createServer(async (req, res) => {
   const path = (req.url ?? "/").split("?")[0];
   if (req.method === "GET" && path === "/health") return send(res, 200, { ok: true });
@@ -85,6 +99,7 @@ const http = createServer(async (req, res) => {
   let body: unknown;
   try { body = await readJson(req); }
   catch (err) { return send(res, (err as { status?: number }).status ?? 400, rpcError((err as Error).message)); }
+  logToolCalls(body, clientIp(req), req.headers["user-agent"]);
 
   const server = buildServer(deps);
   const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined, enableJsonResponse: true });
